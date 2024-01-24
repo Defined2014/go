@@ -761,8 +761,8 @@ func runTest(ctx context.Context, cmd *base.Command, args []string) {
 		}
 	}
 
-	if len(pkgs) > 1 && (testC || testO != "") && !base.IsNull(testO) {
-		if testO != "" && !testODir {
+	if len(pkgs) > 1 && testO != "" && !base.IsNull(testO) {
+		if !testODir {
 			base.Fatalf("with multiple packages, -o must refer to a directory or %s", os.DevNull)
 		}
 
@@ -1094,6 +1094,8 @@ func builderTest(b *work.Builder, ctx context.Context, pkgOpts load.PackageOpts,
 					target = filepath.Join(base.Cwd(), target)
 				}
 			}
+		} else {
+			target = filepath.Join(p.Dir, testBinary+cfg.ExeSuffix)
 		}
 
 		if isNull {
